@@ -55,7 +55,6 @@ def main():
     dragging = False
     selected_pos = None
     dragging_piece = None
-    drag_offset = (0, 0)
 
     while run:
         WIN.fill((0, 0, 0))
@@ -76,30 +75,30 @@ def main():
                         selected_pos = (x, y)
                         dragging = True
                         dragging_piece = piece
-                        drag_offset = (mx - x * 80, my - y * 80)
+                        board.grid[y][x] = None  # temporarily remove piece from board while dragging
 
             elif event.type == pygame.MOUSEBUTTONUP and dragging:
                 mx, my = pygame.mouse.get_pos()
                 tx, ty = coords_to_pos(mx, my)
 
-                if selected_pos:
-                    sx, sy = selected_pos
-                    current_piece = board.grid[sy][sx]
+                sx, sy = selected_pos
+                current_piece = dragging_piece
 
-                    if current_piece and (tx, ty) in current_piece.get_moves(board.grid, sx, sy):
+                if 0 <= tx < 8 and 0 <= ty < 8 and current_piece:
+                    legal_moves = current_piece.get_moves(board.grid, sx, sy)
+                    if (tx, ty) in legal_moves:
                         captured_piece = board.grid[ty][tx]
-
-                        # Perform move
                         board.move_piece((sx, sy), (tx, ty))
 
-                        # Vikara rule
                         if captured_piece:
-                            board.grid[ty][tx].name = captured_piece.name
+                            board.grid[ty][tx].name = captured_piece.name  # Vikara rule
 
-                        # Switch turn
                         board.current_turn = 'black' if board.current_turn == 'white' else 'white'
+                    else:
+                        board.grid[sy][sx] = current_piece  # invalid move, revert
+                else:
+                    board.grid[sy][sx] = current_piece  # out of bounds, revert
 
-                # Reset drag state
                 dragging = False
                 selected_pos = None
                 dragging_piece = None
