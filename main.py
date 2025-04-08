@@ -1,11 +1,17 @@
 import pygame
 import os
-from board import Board
-from utils import coords_to_pos
 
+# Initialize Pygame
 pygame.init()
-PIECE_IMAGES = {}
 
+# Constants
+WIDTH, HEIGHT = 640, 640
+SQUARE_SIZE = WIDTH // 8
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Vikara Chess")
+
+# Load piece images
+PIECE_IMAGES = {}
 def load_images():
     pieces = ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king']
     colors = ['w', 'b']
@@ -13,48 +19,65 @@ def load_images():
         for piece in pieces:
             filename = f"{color}_{piece}.png"
             path = os.path.join('assets', filename)
-            image = pygame.image.load(path)
-            image = pygame.transform.scale(image, (80, 80))
-            PIECE_IMAGES[f"{color}_{piece}"] = image
+            if os.path.exists(path):
+                img = pygame.image.load(path)
+                img = pygame.transform.scale(img, (SQUARE_SIZE, SQUARE_SIZE))
+                PIECE_IMAGES[f"{color}_{piece}"] = img
+            else:
+                print(f"Missing image: {filename}")
 
-# Constants
-WIDTH, HEIGHT = 640, 640
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Vikara Chess")
+# Dummy starting board setup (only pawns and kings for demo)
+def get_starting_board():
+    board = [[None for _ in range(8)] for _ in range(8)]
+    for i in range(8):
+        board[1][i] = {'color': 'b', 'name': 'pawn'}
+        board[6][i] = {'color': 'w', 'name': 'pawn'}
+    board[0][4] = {'color': 'b', 'name': 'king'}
+    board[7][4] = {'color': 'w', 'name': 'king'}
+    return board
 
-board = Board()
+# Convert pixel to board coordinates
+def coords_to_pos(mx, my):
+    return mx // SQUARE_SIZE, my // SQUARE_SIZE
 
-def draw_board(win, board_obj, dragging_piece=None, drag_pos=None, skip_pos=None):
-    colors = [(240, 217, 181), (181, 136, 99)]
+# Draw board and pieces
+def draw_board(win, board, dragging_piece=None, drag_pos=None, skip_pos=None):
+    colors = [(240, 217, 181), (181, 136, 99)]  # light and dark squares
     for y in range(8):
         for x in range(8):
-            pygame.draw.rect(win, colors[(x + y) % 2], (x * 80, y * 80, 80, 80))
+            pygame.draw.rect(win, colors[(x + y) % 2], (x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
             if (x, y) == skip_pos:
                 continue
 
-            piece = board_obj.grid[y][x]
+            piece = board[y][x]
             if piece:
-                img_key = f"{piece.color[0]}_{piece.name}"
-                img = PIECE_IMAGES.get(img_key)
+                key = f"{piece['color'][0]}_{piece['name']}"
+                img = PIECE_IMAGES.get(key)
                 if img:
-                    win.blit(img, (x * 80, y * 80))
+                    win.blit(img, (x * SQUARE_SIZE, y * SQUARE_SIZE))
 
+    # Draw dragging piece on top
     if dragging_piece and drag_pos:
         mx, my = drag_pos
-        img_key = f"{dragging_piece.color[0]}_{dragging_piece.name}"
-        img = PIECE_IMAGES.get(img_key)
+        key = f"{dragging_piece['color'][0]}_{dragging_piece['name']}"
+        img = PIECE_IMAGES.get(key)
         if img:
-            win.blit(img, (mx - 40, my - 40))
+            win.blit(img, (mx - SQUARE_SIZE // 2, my - SQUARE_SIZE // 2))
 
+# Main loop
 def main():
     load_images()
-    run = True
+    board = get_starting_board()
     dragging = False
     selected_pos = None
     dragging_piece = None
 
+    run = True
+    clock = pygame.time.Clock()
+
     while run:
+        clock.tick(60)
         WIN.fill((0, 0, 0))
         draw_board(WIN, board, dragging_piece, pygame.mouse.get_pos() if dragging else None, selected_pos)
         pygame.display.update()
@@ -68,38 +91,26 @@ def main():
                 x, y = coords_to_pos(mx, my)
 
                 if 0 <= x < 8 and 0 <= y < 8:
-                    piece = board.grid[y][x]
-                    if piece and piece.color == board.current_turn:
-                        selected_pos = (x, y)
+                    piece = board[y][x]
+                    if piece:
                         dragging = True
+                        selected_pos = (x, y)
                         dragging_piece = piece
-                        board.grid[y][x] = None  # temporarily remove piece from board while dragging
+                        board[y][x] = None
 
             elif event.type == pygame.MOUSEBUTTONUP and dragging:
                 mx, my = pygame.mouse.get_pos()
                 tx, ty = coords_to_pos(mx, my)
 
                 sx, sy = selected_pos
-                current_piece = dragging_piece
-
-                if 0 <= tx < 8 and 0 <= ty < 8 and current_piece:
-                    legal_moves = current_piece.get_moves(board.grid, sx, sy)
-                    if (tx, ty) in legal_moves:
-                        captured_piece = board.grid[ty][tx]
-                        board.move_piece((sx, sy), (tx, ty))
-
-                        if captured_piece:
-                            board.grid[ty][tx].name = captured_piece.name  # Vikara rule
-
-                        board.current_turn = 'black' if board.current_turn == 'white' else 'white'
-                    else:
-                        board.grid[sy][sx] = current_piece  # invalid move, revert
+                if 0 <= tx < 8 and 0 <= ty < 8:
+                    board[ty][tx] = dragging_piece
                 else:
-                    board.grid[sy][sx] = current_piece  # out of bounds, revert
+                    board[sy][sx] = dragging_piece  # Invalid drop, revert
 
                 dragging = False
-                selected_pos = None
                 dragging_piece = None
+                selected_pos = None
 
     pygame.quit()
 
