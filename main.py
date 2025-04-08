@@ -4,8 +4,6 @@ from board import Board
 from utils import coords_to_pos
 
 pygame.init()
-
-# Load piece images
 PIECE_IMAGES = {}
 
 def load_images():
@@ -47,7 +45,7 @@ def draw_board(win, board_obj, dragging_piece=None, drag_pos=None, skip_pos=None
         img_key = f"{dragging_piece.color[0]}_{dragging_piece.name}"
         img = PIECE_IMAGES.get(img_key)
         if img:
-            win.blit(img, (mx - 40, my - 40))  # center image on cursor
+            win.blit(img, (mx - 40, my - 40))
 
 def main():
     load_images()
