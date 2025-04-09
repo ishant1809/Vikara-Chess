@@ -29,12 +29,37 @@ def load_images():
 # Dummy starting board setup (only pawns and kings for demo)
 def get_starting_board():
     board = [[None for _ in range(8)] for _ in range(8)]
+
+    # Black pieces
+    board[0] = [
+        {'color': 'b', 'name': 'rook'},
+        {'color': 'b', 'name': 'knight'},
+        {'color': 'b', 'name': 'bishop'},
+        {'color': 'b', 'name': 'queen'},
+        {'color': 'b', 'name': 'king'},
+        {'color': 'b', 'name': 'bishop'},
+        {'color': 'b', 'name': 'knight'},
+        {'color': 'b', 'name': 'rook'}
+    ]
     for i in range(8):
         board[1][i] = {'color': 'b', 'name': 'pawn'}
+
+    # White pieces
+    board[7] = [
+        {'color': 'w', 'name': 'rook'},
+        {'color': 'w', 'name': 'knight'},
+        {'color': 'w', 'name': 'bishop'},
+        {'color': 'w', 'name': 'queen'},
+        {'color': 'w', 'name': 'king'},
+        {'color': 'w', 'name': 'bishop'},
+        {'color': 'w', 'name': 'knight'},
+        {'color': 'w', 'name': 'rook'}
+    ]
+    for i in range(8):
         board[6][i] = {'color': 'w', 'name': 'pawn'}
-    board[0][4] = {'color': 'b', 'name': 'king'}
-    board[7][4] = {'color': 'w', 'name': 'king'}
+
     return board
+
 
 # Convert pixel to board coordinates
 def coords_to_pos(mx, my):
@@ -72,6 +97,7 @@ def main():
     dragging = False
     selected_pos = None
     dragging_piece = None
+    turn = 'w'  # White starts
 
     run = True
     clock = pygame.time.Clock()
@@ -92,7 +118,7 @@ def main():
 
                 if 0 <= x < 8 and 0 <= y < 8:
                     piece = board[y][x]
-                    if piece:
+                    if piece and piece['color'] == turn:
                         dragging = True
                         selected_pos = (x, y)
                         dragging_piece = piece
@@ -105,6 +131,7 @@ def main():
                 sx, sy = selected_pos
                 if 0 <= tx < 8 and 0 <= ty < 8:
                     board[ty][tx] = dragging_piece
+                    turn = 'b' if turn == 'w' else 'w'  # Switch turn
                 else:
                     board[sy][sx] = dragging_piece  # Invalid drop, revert
 
@@ -113,6 +140,7 @@ def main():
                 selected_pos = None
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
