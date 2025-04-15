@@ -29,3 +29,13 @@ body{
     color:white;
     cursor: pointer;
 }
+
+#total_players
+{
+    position: absolute;
+    right: 20px;
+    font-weight: 700;
+    font-size: 18px;
+    top: 15px;
+    font-family: 'Times New Roman', Times, serif;
+}

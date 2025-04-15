@@ -1,22 +1,22 @@
-var board1 = Chessboard('board1', 'start')
+
 var board = null
 var game = new Chess()
 var $status = $('#status')
 var $fen = $('#fen')
 var $pgn = $('#pgn')
 
-function onDragStart (source, piece, position, orientation) {
+function onDragStart(source, piece, position, orientation) {
   // do not pick up pieces if the game is over
   if (game.game_over()) return false
 
   // only pick up pieces for the side to move
   if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+    (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
     return false
   }
 }
 
-function onDrop (source, target) {
+function onDrop(source, target) {
   // see if the move is legal
   var move = game.move({
     from: source,
@@ -32,11 +32,11 @@ function onDrop (source, target) {
 
 // update the board position after the piece snap
 // for castling, en passant, pawn promotion
-function onSnapEnd () {
+function onSnapEnd() {
   board.position(game.fen())
 }
 
-function updateStatus () {
+function updateStatus() {
   var status = ''
 
   var moveColor = 'White'
@@ -78,21 +78,28 @@ var config = {
 }
 board = Chessboard('myBoard', config)
 
+
+
 updateStatus()
 
 
-function handleButtonClick(event)
-{
-    const timer = Number(event.target.getAttribute('data-time'));
-    alert(timer);
+function handleButtonClick(event) {
+  const timer = Number(event.target.getAttribute('data-time'));
+  alert(timer);
 }
 
-document.addEventListener("DOMContentLoaded",function(){
-    const buttons = document.getElementsByClassName("timer-button");
-    for(let index=0;index < buttons.length; index++)
-    {
-        const button = buttons[index];
-        button.addEventListener('click',handleButtonClick)
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.getElementsByClassName("timer-button");
+  for (let index = 0; index < buttons.length; index++) {
+    const button = buttons[index];
+    button.addEventListener('click', handleButtonClick)
+  }
 });
+
+const socket = io('http://localhost:3000');
+socket.on("total_players_count_change", function (totalPlayersCount) {
+  $("#total_players").html("Total Players: " + totalPlayersCount)
+});
+console.log(socket);
+
 
