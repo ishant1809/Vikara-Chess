@@ -39,3 +39,28 @@ body{
     top: 15px;
     font-family: 'Times New Roman', Times, serif;
 }
+
+.display-none
+{
+    display: none;
+}
+
+#yaps
+{
+    font-size: 30px;
+}
+
+
+
+
+#waiting_text_p
+{
+    width: 90vw;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30vh;
+    text-align: center;
+    font-size: 40px;
+
+}

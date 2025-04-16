@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vikara Chess | Ishant</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"
-        integrity="sha512-xRllwz2gdZciIB+AkEbeq+gVhX8VB8XsfqeFbUh+SzHlN96dEduwtTuVuc2u9EROlmW9+yhRlxjif66ORpsgVA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/lib/chess.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./lib/chessboardjs/css/chessboard-1.0.0.min.css">
@@ -20,14 +19,15 @@
 <body>
     <p id="total_players">Total Players : 0</p>
     <h1 style="text-align: center;">CHESS</h1>
-    <div class="display-f">
+    <div id="main-element" class="display-f">
         <div id="myBoard" style="width: 500px"></div>
-        <div style="display: flex; gap:10px">
+        <div id="buttonsParent" style="display: flex; gap:10px">
             <button data-time="10" class="timer-button">10 min</button>
             <button data-time="15" class="timer-button">15 min</button>
             <button data-time="20" class="timer-button">20 min</button>
         </div>
     </div>
+    <p id="waiting_text_p" class="display-none">Waiting for opponent to join</p>
 
     <script src="./lib/chessboardjs/js/chessboard-1.0.0.min.js"></script>
     <script src="./script.js"></script>
