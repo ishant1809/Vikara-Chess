@@ -50,9 +50,9 @@ function FireonDisConnect(socket) {
     fireTotalPlayers();
 }
 
-function initialSetupMatch(opponentId, socketId) {
-    players[opponentId].emit("match_made", "w");
-    players[socketId].emit("match_made", "b");
+function initialSetupMatch(opponentId, socketId,time) {
+    players[opponentId].emit("match_made", "w",time);
+    players[socketId].emit("match_made", "b",time);
 
     players[opponentId].on("sync_state", function (fen, turn) {
         players[socketId].emit("sync_state_from_server", fen, turn);
@@ -76,7 +76,7 @@ function HandlePlayRequest(socket, time) {
         matches[time].push({
             [opponentId]: socket.id
         });
-        initialSetupMatch(opponentId, socket.id)
+        initialSetupMatch(opponentId, socket.id,time)
         return;
     }
 

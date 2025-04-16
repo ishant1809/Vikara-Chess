@@ -23,6 +23,12 @@ body{
     padding: 4px 10px;
 }
 
+.flex-col {
+    flex-direction: column;
+}
+
+
+
 .timer-button:hover
 {
     background: rgb(53, 169, 53);
@@ -45,12 +51,23 @@ body{
     display: none;
 }
 
+
+
+
+
+
 #yaps
 {
     font-size: 30px;
+    margin:0;
 }
 
-
+#timerdisplay
+{
+    margin: 0;
+    margin-top: 0;
+    font-size: 40px;
+}
 
 
 #waiting_text_p
@@ -64,3 +81,4 @@ body{
     font-size: 40px;
 
 }
+
