@@ -53,13 +53,57 @@ function onDragStart(source, piece, position, orientation) {
 }
 
 function onDrop(source, target) {
-  var move = game.move({
+  const oldBoard = game.board(); // 2D array before move
+  const targetSquarePiece = oldBoard.find(row => row.find(sq => sq && sq.square === target));
+
+  const move = game.move({
     from: source,
     to: target,
     promotion: 'q'
   });
 
   if (move === null) return 'snapback';
+
+  const piece = move.piece;
+  const targetPiece = targetSquarePiece ? targetSquarePiece[0] : null;
+
+  // Skip transformation logic if the piece is a King
+  if (piece === 'k' || piece === 'K') {
+    // The King just moves, no transformation into another piece
+    socket.emit('sync_state', game.fen(), game.turn());
+    if (timerInstance) {
+      timerInstance.pause();
+    }
+    updateStatus();
+    return; // King won't transform, no further logic needed
+  }
+
+  // Proceed with "Become what you capture" logic for non-King pieces
+  if (move.captured && piece !== 'k' && piece !== 'K') {
+    const capturedPiece = move.captured; // e.g., 'p', 'n', 'r', etc.
+    const newType = capturedPiece.toLowerCase(); // The piece being captured
+
+    // Ensure the captured piece is transformed into the same color as the moving piece
+    const transformedPiece = (move.color === 'w' ? newType.toUpperCase() : newType.toLowerCase()); // Same color as the piece moving
+
+    const newFen = game.fen().split(' ');
+    const boardLayout = newFen[0];
+
+    const boardArr = boardLayout.split('/');
+    const targetRank = 8 - parseInt(target[1]);
+    const targetFile = target.charCodeAt(0) - 'a'.charCodeAt(0);
+
+    let expanded = boardArr[targetRank].replace(/\d/g, d => '1'.repeat(d));
+    expanded = expanded.substring(0, targetFile) + transformedPiece + expanded.substring(targetFile + 1);
+
+    // Restore numeric compression
+    const recompressed = expanded.replace(/1{1,8}/g, match => match.length);
+    boardArr[targetRank] = recompressed;
+    newFen[0] = boardArr.join('/');
+
+    const finalFen = newFen.join(' ');
+    game.load(finalFen);
+  }
 
   socket.emit('sync_state', game.fen(), game.turn());
 
@@ -68,6 +112,12 @@ function onDrop(source, target) {
   }
 
   updateStatus();
+  if (game.in_checkmate()) {
+    const winner = game.turn() === 'b' ? 'White' : 'Black';
+    alert('Game over. ' + winner + ' wins by checkmate!');
+    socket.emit("game_over", winner.toLowerCase());
+  }
+  
 }
 
 function onSnapEnd() {
@@ -111,7 +161,6 @@ var config = {
   onSnapEnd: onSnapEnd,
   onChange: onChange
 };
-
 board = Chessboard('myBoard', config);
 updateStatus();
 
@@ -159,7 +208,7 @@ socket.on("match_made", (color, time) => {
     });
   } else {
     timerInstance = null;
-    $('#timerDisplay').html(currentMatchTime+ ":00")
+    $('#timerDisplay').html(currentMatchTime + ":00")
   }
 });
 
@@ -187,4 +236,3 @@ socket.on("game_over_from_server", function (winner) {
   alert(winner + " won the match");
   window.location.reload();
 });
-

@@ -1,22 +1,24 @@
-body{
-    background: black;
+body {
+    background-image: url('img/bgchs.jpg'), linear-gradient(black, darkslategray);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: white;
-    font-family:'Times New Roman', Times, serif
 }
-.display-f
-{
-    display:flex;
+
+.display-f {
+    display: flex;
     margin-top: 30px;
     align-items: center;
     justify-content: center;
     gap: 80px;
 }
 
-.timer-button
-{
+.timer-button {
+
     border: none;
     border-radius: 4px;
-    font-family:'Times New Roman', Times, serif;
+    font-family: 'Times New Roman', Times, serif;
     font-size: 30px;
     background: white;
     color: black;
@@ -29,15 +31,13 @@ body{
 
 
 
-.timer-button:hover
-{
+.timer-button:hover {
     background: rgb(53, 169, 53);
-    color:white;
+    color: white;
     cursor: pointer;
 }
 
-#total_players
-{
+#total_players {
     position: absolute;
     right: 20px;
     font-weight: 700;
@@ -46,8 +46,7 @@ body{
     font-family: 'Times New Roman', Times, serif;
 }
 
-.display-none
-{
+.display-none {
     display: none;
 }
 
@@ -56,22 +55,29 @@ body{
 
 
 
-#yaps
-{
+#yaps {
     font-size: 30px;
-    margin:0;
+    margin: 0;
 }
 
-#timerdisplay
-{
+#timerDisplay {
     margin: 0;
     margin-top: 0;
-    font-size: 40px;
+    font-size: 80px;
+    /* Increase the font size */
+    font-weight: bold;
+    /* Make the font bolder for more visibility */
+    text-align: center;
+    /* Center-align the timer */
+    line-height: 1.2;
+    /* Adjust line-height for better spacing */
+    color: white;
+    /* Ensure the timer text color is white */
 }
 
 
-#waiting_text_p
-{
+
+#waiting_text_p {
     width: 90vw;
     text-align: center;
     margin-left: auto;
@@ -82,3 +88,22 @@ body{
 
 }
 
+/* Classic green and white board colors */
+.white-1e1d7 {
+    background-color: #ffffff !important; /* Light squares */
+  }
+  
+  .black-3c85d {
+    background-color: #2a9eb3 !important; /* Dark squares */
+  }
+  
+  /* Optional: Highlights */
+  .highlight1-32417 {
+    background-color: #2a9eb3 !important; /* Gray for last move square */
+  }
+  
+  .highlight2-9c5d2 {
+    background-color: #1eecff !important; /* Yellow for selected square */
+  }
+  
+ 
