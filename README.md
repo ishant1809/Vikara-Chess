@@ -20,6 +20,10 @@ Derived from the Sanskrit word **विकार (Vikāra)**, meaning **change**
 
 - **Game Over Conditions**: The game can end with checkmate or when a player's time runs out.
 
+## FEN (Forsyth-Edwards Notation)
+
+Vikara Chess uses FEN to represent the board state, with the transformation of captured pieces reflected in the notation.
+
 ## Technologies Used
 
 - **Node.js**: For backend server and handling real-time communication.
@@ -109,9 +113,6 @@ To contribute:
 5. Push to the branch (`git push origin feature-name`).
 6. Create a new Pull Request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgements
 
