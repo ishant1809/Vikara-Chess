@@ -1,109 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-dark: #0a0c0e;
+    --accent-emerald: #10b981;
+    --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --white-square: #e2e8f0;
+    --dark-square: #475569;
+}
+
 body {
-    background-image: url('img/bgchs.jpg'), linear-gradient(black, darkslategray);
+    background: var(--bg-dark) url('img/bg_premium.png') no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-}
-
-.display-f {
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    min-height: 100vh;
     display: flex;
-    margin-top: 30px;
-    align-items: center;
-    justify-content: center;
-    gap: 80px;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
-.timer-button {
-
-    border: none;
-    border-radius: 4px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 30px;
-    background: white;
-    color: black;
-    padding: 4px 10px;
-}
-
-.flex-col {
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    flex: 1;
+    display: flex;
     flex-direction: column;
 }
 
-
-
-.timer-button:hover {
-    background: rgb(53, 169, 53);
-    color: white;
-    cursor: pointer;
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
 }
 
-#total_players {
-    position: absolute;
-    right: 20px;
+.brand h1 {
+    font-size: 2rem;
     font-weight: 700;
-    font-size: 18px;
-    top: 15px;
-    font-family: 'Times New Roman', Times, serif;
-}
-
-.display-none {
-    display: none;
-}
-
-
-
-
-
-
-#yaps {
-    font-size: 30px;
     margin: 0;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #fff, var(--accent-emerald));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-bar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 0.5rem 1.5rem;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 3rem;
+    align-items: start;
+}
+
+.board-section {
+    position: relative;
+    padding: 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+
+#myBoard {
+    width: 600px !important;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.card-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 #timerDisplay {
-    margin: 0;
-    margin-top: 0;
-    font-size: 80px;
-    /* Increase the font size */
-    font-weight: bold;
-    /* Make the font bolder for more visibility */
+    font-size: 3.5rem;
+    font-weight: 700;
     text-align: center;
-    /* Center-align the timer */
-    line-height: 1.2;
-    /* Adjust line-height for better spacing */
-    color: white;
-    /* Ensure the timer text color is white */
+    font-variant-numeric: tabular-nums;
+    margin: 0.5rem 0;
+    color: var(--accent-emerald);
+    text-shadow: 0 0 20px var(--accent-emerald-glow);
 }
 
+.game-info {
+    font-size: 1.1rem;
+}
 
+#status {
+    color: var(--accent-emerald);
+    font-weight: 600;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.btn:hover {
+    background: var(--accent-emerald);
+    border-color: var(--accent-emerald);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-emerald-glow);
+}
+
+.btn-primary {
+    background: var(--accent-emerald);
+    border-color: var(--accent-emerald);
+}
+
+.display-none {
+    display: none !important;
+}
 
 #waiting_text_p {
-    width: 90vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30vh;
-    text-align: center;
-    font-size: 40px;
-
+    z-index: 100;
+    background: var(--glass-bg);
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
 }
 
-/* Classic green and white board colors */
+/* Chessboard Overrides */
 .white-1e1d7 {
-    background-color: #ffffff !important; /* Light squares */
-  }
-  
-  .black-3c85d {
-    background-color: #2a9eb3 !important; /* Dark squares */
-  }
-  
-  /* Optional: Highlights */
-  .highlight1-32417 {
-    background-color: #2a9eb3 !important; /* Gray for last move square */
-  }
-  
-  .highlight2-9c5d2 {
-    background-color: #1eecff !important; /* Yellow for selected square */
-  }
-  
+    background-color: var(--white-square) !important;
+}
+
+.black-3c85d {
+    background-color: var(--dark-square) !important;
+}
+
+.highlight1-32417 {
+    box-shadow: inset 0 0 3px 3px rgba(255, 255, 255, 0.5) !important;
+}
+
+.highlight2-9c5d2 {
+    background-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.last-move {
+    box-shadow: inset 0 0 4px 4px rgba(16, 185, 129, 0.6) !important;
+}
+
+@media (max-width: 1000px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+    }
+    #myBoard {
+        width: 100% !important;
+        max-width: 500px;
+    }
+}
  

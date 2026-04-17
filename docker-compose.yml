@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  chess-app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+    depends_on:
+      - redis
+    networks:
+      - chess-network
+
+  # Scaled instance to demonstrate horizontal scaling
+  chess-app-2:
+    build: .
+    ports:
+      - "3001:3000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+    depends_on:
+      - redis
+    networks:
+      - chess-network
+
+  redis:
+    image: redis:alpine
+    networks:
+      - chess-network
+
+networks:
+  chess-network:
+    driver: bridge
